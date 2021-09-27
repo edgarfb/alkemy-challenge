@@ -3,7 +3,10 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import axios from "axios";
 import "./LogIn.css";
 
-function LogIn() {
+// MAIN
+function LogIn(props) {
+  const [isAuthorized, setIsAuthorized] = React.useState(true);
+  const [isSubmited, setIsSubmited] = React.useState(false);
   return (
     <Formik
       initialValues={{ email: "", password: "" }}
@@ -18,7 +21,7 @@ function LogIn() {
         }
         if (!values.password) {
           errors.password = "This fild has to be filled";
-        } else if (values.password.length < 8) {
+        } else if (values.password.length < 5) {
           errors.password =
             "The password need to be grater than 8 characters long";
         }
@@ -26,22 +29,30 @@ function LogIn() {
       }}
       onSubmit={(values, { setSubmitting, resetForm }) => {
         resetForm();
+        let baseURL = `http://challenge-react.alkemy.org/`;
+        axios
+          .post(baseURL, {
+            email: values.email,
+            password: values.password,
+          })
+          .then((res) => {
+            let store = localStorage.setItem("userToken", res.data.token);
+            props.onUserToken(localStorage.getItem("userToken"));
+            setIsSubmited(true);
+          })
+          .catch((error) => {
+            console.log(error.response);
+            if (error.response.status !== 200) {
+              setIsAuthorized(false);
+            }
+            setTimeout(() => setIsAuthorized(true), 2000);
+          });
         setTimeout(() => {
-          console.log(values);
           setSubmitting(false);
         }, 400);
       }}
     >
-      {/* */}
-
-      {({
-        values,
-        errors,
-        touched,
-        handleSubmit,
-        isSubmitting,
-        isValidating,
-      }) => {
+      {({ values, errors }) => {
         return (
           <Form className="form-control formBox">
             <div>
@@ -78,6 +89,16 @@ function LogIn() {
                 Submit
               </button>
             </div>
+            {!isAuthorized && (
+              <div className="alert alert-warning" role="alert">
+                Unauthorized - Please provide valid email and password
+              </div>
+            )}
+            {isSubmited && (
+              <div className="alert alert-success" role="alert">
+                The form have been submitted!
+              </div>
+            )}
           </Form>
         );
       }}

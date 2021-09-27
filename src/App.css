@@ -1,6 +1,14 @@
+.container {
+  min-width: 320px !important;
+}
+
 .toCenter {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.form-box {
+  height: 80vh;
 }
