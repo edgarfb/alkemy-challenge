@@ -17,9 +17,9 @@ function App() {
   const [heroeSearchTxt, setHeroeSearchTxt] = React.useState();
   const [heroes, setHeroes] = React.useState();
 
-  function changeHandler(txt) {
-    console.log(txt);
-    setHeroeSearchTxt(txt);
+  // This is the text input for search the heroes
+  function changeHandler(heroToFind) {
+    setHeroeSearchTxt(heroToFind);
   }
 
   // This works find heroes based on his name
@@ -33,16 +33,20 @@ function App() {
         }
         let all = res.data.results;
         let filtered = res.data.results.filter((he) => he.name.match(regEx));
-
+        console.log(filtered);
         setHeroes(filtered);
       })
 
       .catch((error) => console.log(error.response));
   }, [heroeSearchTxt]);
+
+  // Remove the user Token
   function logOutHandler() {
     localStorage.removeItem("userToken");
     setUserToken("");
   }
+
+  // Check is the token exist on LocalStorege
   function checkToken() {
     let token = localStorage.hasOwnProperty("userToken");
 

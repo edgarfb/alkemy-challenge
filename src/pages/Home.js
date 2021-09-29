@@ -5,10 +5,16 @@ import Card from "../components/Card/Card";
 function Home(props) {
   // console.log(props.heroes);
   return (
-    <div className="row">
+    <div className="row g-4">
       {props.heroes &&
         props.heroes.map((hero) => (
-          <Card src={hero.image.url} name={hero.name} />
+          <div className="col-3">
+            <Card
+              src={hero.image.url}
+              name={hero.name}
+              powerstats={hero.powerstats}
+            />
+          </div>
         ))}
     </div>
   );
