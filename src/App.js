@@ -14,35 +14,31 @@ const accessToken =
 const baseUrl = "https://superheroapi.com/api/1621075358241982/search/";
 
 function App() {
+  const [heroeSearchTxt, setHeroeSearchTxt] = React.useState();
   const [heroes, setHeroes] = React.useState();
-  console.log("heroes", heroes);
+
   function changeHandler(txt) {
-    setHeroes(txt);
+    console.log(txt);
+    setHeroeSearchTxt(txt);
   }
-  // Just for develop the card and maped the info I get
-  React.useEffect(() => {
-    axios
-      .get(`${baseUrl}ironman`)
-      .then((res) => {
-        console.log(res.data.results);
-        let maped = res.data.results.map((e) => {
-          return {
-            name: e.name,
-            imgUrl: e.image.url,
-          };
-        });
-        setHeroes(maped);
-      })
-      .catch((error) => console.log(error.response));
-  }, []);
 
   // This works find heroes based on his name
-  // React.useEffect(() => {
-  //   axios
-  //     .get(`${baseUrl}${heroes}`)
-  //     .then((res) => console.log(res.data.results))
-  //     .catch((error) => console.log(error.response));
-  // }, [heroes]);
+  React.useEffect(() => {
+    let regEx = new RegExp(`${heroeSearchTxt}`, "gi");
+    axios
+      .get(`${baseUrl}${heroeSearchTxt}`)
+      .then((res) => {
+        if (res.data.response === "error") {
+          console.error(res.data.error);
+        }
+        let all = res.data.results;
+        let filtered = res.data.results.filter((he) => he.name.match(regEx));
+
+        setHeroes(filtered);
+      })
+
+      .catch((error) => console.log(error.response));
+  }, [heroeSearchTxt]);
   function logOutHandler() {
     localStorage.removeItem("userToken");
     setUserToken("");
@@ -63,19 +59,18 @@ function App() {
     <div className="container">
       <Navbar onLogOut={logOutHandler} />
       <SearchHeroes onChangeHandler={changeHandler} />
-      <h1>{heroes[0].name}</h1>
-      <img src={heroes[0].imgUrl} alt="iron man" />
+
       <Switch>
         {/* <div className="d-flex justify-content-center align-items-center form-box">
           {!userToken && <LogIn onUserToken={userTokenHandler} />}
         </div> */}
-        {/* <Route path="/" exact>
+        <Route path="/" exact>
           {" "}
-          <Home />
+          {heroeSearchTxt && <Home heroes={heroes} />}
         </Route>
         <Route path="/heroes">
           <Heroes />
-        </Route> */}
+        </Route>
       </Switch>
     </div>
   );

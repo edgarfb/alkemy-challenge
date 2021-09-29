@@ -6,7 +6,10 @@ function SearchHeroes(props) {
     <form>
       <input
         type="text"
-        onChange={(e) => props.onChangeHandler(e.target.value)}
+        onChange={(e) => {
+          e.preventDefault();
+          props.onChangeHandler(e.target.value);
+        }}
       />
     </form>
   );
