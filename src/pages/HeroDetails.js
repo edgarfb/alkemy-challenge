@@ -6,12 +6,15 @@ import Card from "../components/Card/Card";
 function HeroDetails() {
   const { heroId } = useParams();
   const [heroDetails, setHeroDetails] = React.useState(null);
-  const URL = "https://superheroapi.com/api/1621075358241982/";
+
+  const TOKEN_API = "1621075358241982";
+  const CORS_ANYWARE = "https://cors-anywhere.herokuapp.com/";
+  const baseUrl = `${CORS_ANYWARE}https://superheroapi.com/api/${TOKEN_API}/`;
 
   console.log(heroDetails);
   React.useEffect(() => {
     axios
-      .get(`${URL}${heroId}`)
+      .get(`${baseUrl}${heroId}`)
       .then((res) => setHeroDetails({ ...res.data }))
       .catch((err) => console.log(err.response));
   }, [heroId]);
