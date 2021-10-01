@@ -10,8 +10,8 @@ import SearchHeroes from "./components/SearchHeroes.js/SearchHeroes";
 import HeroDetails from "./pages/HeroDetails";
 
 const TOKEN_API = "1621075358241982";
-
-const baseUrl = "https://superheroapi.com/api/1621075358241982/search/";
+const CORS_ANYWARE = "https://cors-anywhere.herokuapp.com/";
+const baseUrl = `${CORS_ANYWARE}https://superheroapi.com/api/${TOKEN_API}/search/`;
 
 function App() {
   const [heroeSearchTxt, setHeroeSearchTxt] = React.useState();
