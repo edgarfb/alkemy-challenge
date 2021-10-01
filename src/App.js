@@ -7,15 +7,49 @@ import Navbar from "./components/navbar/Navbar";
 import Home from "./pages/Home";
 import Heroes from "./pages/Heroes";
 import SearchHeroes from "./components/SearchHeroes.js/SearchHeroes";
+import HeroDetails from "./pages/HeroDetails";
 
 const TOKEN_API = "1621075358241982";
-const accessToken =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiZW1haWwiOiJjaGFsbGVuZ2VAYWxrZW15Lm9yZyIsImlhdCI6MTUxNjIzOTAyMn0.ilhFPrG0y7olRHifbjvcMOlH7q2YwlegT0f4aSbryBE";
+
 const baseUrl = "https://superheroapi.com/api/1621075358241982/search/";
 
 function App() {
   const [heroeSearchTxt, setHeroeSearchTxt] = React.useState();
   const [heroes, setHeroes] = React.useState();
+  const [teamMembers, setTeamMembers] = React.useState([]);
+  const [goodHeroes, setGoodHeroes] = React.useState([]);
+  const [badHeroes, setBadHeroes] = React.useState([]);
+
+  function removeHeroHandler(heroId) {
+    let newTeamMembers;
+    return setTeamMembers();
+  }
+
+  // Managing heroes
+  function addHeroesHandler(hero) {
+    // function addGoodHeroes() {}
+    console.log(hero);
+    if (teamMembers.length === 6) {
+      console.log("No es posible agregar mas heroes");
+      return;
+    }
+    // Test if the hero already exist
+    else if (teamMembers.some((h) => h.id === hero.id)) {
+      alert("El Hero ya existe");
+      return;
+    }
+    return setTeamMembers((prev) => [...prev, hero]);
+  }
+
+  // Show details of the hero on a especific page
+  function detailsHeroTeamHenadler() {
+    // TODO this shows de hero deatils page
+  }
+
+  // Remove Hero
+  function removeHeroTeamHandler(heroId) {
+    setTeamMembers(teamMembers.filter((hero) => hero.id !== heroId));
+  }
 
   // This is the text input for search the heroes
   function changeHandler(heroToFind) {
@@ -40,7 +74,7 @@ function App() {
       .catch((error) => console.log(error.response));
   }, [heroeSearchTxt]);
 
-  // Remove the user Token
+  // Remove the user Token to logOut
   function logOutHandler() {
     localStorage.removeItem("userToken");
     setUserToken("");
@@ -60,23 +94,33 @@ function App() {
   };
 
   return (
-    <div className="container">
+    <React.Fragment>
       <Navbar onLogOut={logOutHandler} />
-      <SearchHeroes onChangeHandler={changeHandler} />
-
-      <Switch>
-        {/* <div className="d-flex justify-content-center align-items-center form-box">
+      <div className="container">
+        <Switch>
+          {/* <div className="d-flex justify-content-center align-items-center form-box">
           {!userToken && <LogIn onUserToken={userTokenHandler} />}
         </div> */}
-        <Route path="/" exact>
-          {" "}
-          {heroeSearchTxt && <Home heroes={heroes} />}
-        </Route>
-        <Route path="/heroes">
-          <Heroes />
-        </Route>
-      </Switch>
-    </div>
+          <Route path="/" exact>
+            {" "}
+            <SearchHeroes onChangeHandler={changeHandler} />
+            {heroeSearchTxt && (
+              <Home heroes={heroes} onAddHeroToTeam={addHeroesHandler} />
+            )}
+          </Route>
+          <Route path="/heroes">
+            <Heroes
+              teamMembers={teamMembers}
+              onRemoveHeroTeam={removeHeroTeamHandler}
+              onDetailsHeroTeam={detailsHeroTeamHenadler}
+            />
+          </Route>
+          <Route path="/hero-details/:heroId">
+            <HeroDetails />
+          </Route>
+        </Switch>
+      </div>
+    </React.Fragment>
   );
 }
 
