@@ -8,7 +8,7 @@ function HeroDetails() {
   const [heroDetails, setHeroDetails] = React.useState(null);
 
   const TOKEN_API = "1621075358241982";
-  const CORS_ANYWARE = "https://cors-anywhere.herokuapp.com/";
+  const CORS_ANYWARE = "https://cors.bridged.cc/";
   const baseUrl = `${CORS_ANYWARE}https://superheroapi.com/api/${TOKEN_API}/`;
 
   console.log(heroDetails);

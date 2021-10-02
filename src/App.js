@@ -10,7 +10,7 @@ import SearchHeroes from "./components/SearchHeroes.js/SearchHeroes";
 import HeroDetails from "./pages/HeroDetails";
 
 const TOKEN_API = "1621075358241982";
-const CORS_ANYWARE = "https://cors-anywhere.herokuapp.com/";
+const CORS_ANYWARE = "https://cors.bridged.cc/";
 const baseUrl = `${CORS_ANYWARE}https://superheroapi.com/api/${TOKEN_API}/search/`;
 
 function App() {
