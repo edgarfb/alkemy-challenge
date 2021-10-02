@@ -19,12 +19,39 @@ function App() {
   const [teamMembers, setTeamMembers] = React.useState([]);
   const [goodHeroes, setGoodHeroes] = React.useState([]);
   const [badHeroes, setBadHeroes] = React.useState([]);
+  const [teamStats, setTeamStats] = React.useState({});
 
+  console.log(teamMembers);
   function removeHeroHandler(heroId) {
     let newTeamMembers;
     return setTeamMembers();
   }
 
+  React.useEffect(() => {
+    let stats = teamMembers.map((stat) => {
+      return stat.powerstats;
+    });
+    let getStats = (stat) => {
+      if (stats.length === 0) {
+        return;
+      }
+      return stats
+        .map((s) => s[stat])
+        .filter((s) => s !== "null")
+        .reduce((a, b) => {
+          return +a + +b;
+        });
+    };
+    return setTeamStats({
+      combat: getStats("combat"),
+      durability: getStats("durability"),
+      intelligence: getStats("intelligence"),
+      power: getStats("power"),
+      speed: getStats("speed"),
+      strength: getStats("strength"),
+    });
+  }, [teamMembers]);
+  console.log("teamStats", teamStats);
   // Managing heroes
   function addHeroesHandler(hero) {
     // function addGoodHeroes() {}
@@ -110,6 +137,7 @@ function App() {
           </Route>
           <Route path="/heroes">
             <Heroes
+              teamStats={teamStats}
               teamMembers={teamMembers}
               onRemoveHeroTeam={removeHeroTeamHandler}
               onDetailsHeroTeam={detailsHeroTeamHenadler}

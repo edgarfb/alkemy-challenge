@@ -8,7 +8,12 @@ function Heroes(props) {
   // const v = props.teamMembers.map((hero) => {
   //   return hero.powerstats.speed;
   // });
-
+  console.log("teamStats", props.teamStats);
+  let teamsKeys =
+    props.teamMembers.length > 0
+      ? Object.keys(props.teamMembers[0].powerstats)
+      : [];
+  console.log(teamsKeys);
   React.useEffect(() => {}, []);
 
   // console.log("mapeo", v);
@@ -45,11 +50,23 @@ function Heroes(props) {
       </div>
       <div className="col-md-4">
         <h2>Team Stats</h2>
-        {props.teamMembers &&
-          props.teamMembers.map((hero) => {
-            console.log("hero from col 4", hero.powerstats);
-          })}
-        <StatsBar />
+        {teamsKeys.map((k) => {
+          return (
+            <React.Fragment>
+              <h5>{k}</h5>
+              <StatsBar
+                width={props.teamStats[k] / props.teamMembers.length}
+                value={Math.floor(
+                  props.teamStats[k] / props.teamMembers.length
+                )}
+              />
+            </React.Fragment>
+          );
+        })}
+        {/* {props.teamMembers &&
+          props.teamMembers.map((hero, index) => {
+            
+          })} */}
       </div>
     </div>
   );
