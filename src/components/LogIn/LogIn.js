@@ -42,15 +42,15 @@ function LogIn(props) {
             let store = localStorage.setItem("userToken", res.data.token);
             props.onUserToken(localStorage.getItem("userToken"));
             setIsSubmited(true);
-            props.onLogin(true);
+            // props.onLogin(true);
             history.replace("/");
           })
           .catch((error) => {
             if (error.response.status !== 200) {
-              props.onLogin(false);
+              // props.onLogin(false);
             }
             setTimeout(() => {
-              props.onLogin(true);
+              // props.onLogin(true);
             }, 2000);
           });
         setTimeout(() => {
