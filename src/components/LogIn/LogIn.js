@@ -32,7 +32,7 @@ function LogIn(props) {
       }}
       onSubmit={(values, { setSubmitting, resetForm }) => {
         resetForm();
-        let baseURL = `http://challenge-react.alkemy.org/`;
+        let baseURL = `https://cors.bridged.cc/http://challenge-react.alkemy.org/`;
         axios
           .post(baseURL, {
             email: values.email,
