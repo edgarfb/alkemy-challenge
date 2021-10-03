@@ -1,29 +1,32 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import { useHistory } from "react-router-dom";
 import axios from "axios";
+import AuthContext from "../../context/auth-context";
 import "./LogIn.css";
 
 // MAIN
 function LogIn(props) {
-  const [isAuthorized, setIsAuthorized] = React.useState(true);
+  // const [isAuthorized, setIsAuthorized] = React.useState(true);
   const [isSubmited, setIsSubmited] = React.useState(false);
+  const isLogIn = React.useContext(AuthContext);
+  const history = useHistory();
   return (
     <Formik
       initialValues={{ email: "", password: "" }}
       validate={(values) => {
         const errors = {};
         if (!values.email) {
-          errors.email = "This fild has to be filled";
+          errors.email = "Este campo es necesario.";
         } else if (
           !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
         ) {
-          errors.email = "Invalid email format";
+          errors.email = "Formato no válido";
         }
         if (!values.password) {
-          errors.password = "This fild has to be filled";
+          errors.password = "Este campo es necesario.";
         } else if (values.password.length < 5) {
-          errors.password =
-            "The password need to be grater than 8 characters long";
+          errors.password = "La contraseña debe de al menos 5 caracteres.";
         }
         return errors;
       }}
@@ -39,13 +42,16 @@ function LogIn(props) {
             let store = localStorage.setItem("userToken", res.data.token);
             props.onUserToken(localStorage.getItem("userToken"));
             setIsSubmited(true);
+            props.onLogin(true);
+            history.replace("/");
           })
           .catch((error) => {
-            console.log(error.response);
             if (error.response.status !== 200) {
-              setIsAuthorized(false);
+              props.onLogin(false);
             }
-            setTimeout(() => setIsAuthorized(true), 2000);
+            setTimeout(() => {
+              props.onLogin(true);
+            }, 2000);
           });
         setTimeout(() => {
           setSubmitting(false);
@@ -56,15 +62,15 @@ function LogIn(props) {
         return (
           <Form className="form-control formBox">
             <div>
-              <h3 className="text-center">Log in</h3>
+              <h3 className="text-center">Iniciar seción</h3>
             </div>
             <div className="mb-3">
-              <label htmlFor="email">Email</label>
+              <label htmlFor="email">Correo</label>
               <Field
                 className="form-control"
                 type="email"
                 name="email"
-                placeholder="Email"
+                placeholder="correo@alkemy.com"
               ></Field>
             </div>
             <ErrorMessage
@@ -72,12 +78,12 @@ function LogIn(props) {
               component={() => <div className="rojo">{errors.email}</div>}
             />
             <div className="mb-3">
-              <label htmlFor="password">Password</label>
+              <label htmlFor="password">Contraseña</label>
               <Field
                 className="form-control"
                 type="password"
                 name="password"
-                placeholder="password"
+                placeholder=""
               ></Field>
             </div>
             <ErrorMessage
@@ -86,10 +92,10 @@ function LogIn(props) {
             />
             <div className="d-flex justify-content-center">
               <button type="submit" className="btn btn-primary">
-                Submit
+                Enviar
               </button>
             </div>
-            {!isAuthorized && (
+            {!props.onLogin && (
               <div className="alert alert-warning" role="alert">
                 Unauthorized - Please provide valid email and password
               </div>

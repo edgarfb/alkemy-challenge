@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, useHistory } from "react-router-dom";
 import "./App.css";
 import axios from "axios";
 import LogIn from "./components/LogIn/LogIn";
@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import Heroes from "./pages/Heroes";
 import SearchHeroes from "./components/SearchHeroes.js/SearchHeroes";
 import HeroDetails from "./pages/HeroDetails";
+import AuthContext from "./context/auth-context";
 
 const TOKEN_API = "1621075358241982";
 const CORS_ANYWARE = "https://cors.bridged.cc/";
@@ -17,11 +18,14 @@ function App() {
   const [heroeSearchTxt, setHeroeSearchTxt] = React.useState();
   const [heroes, setHeroes] = React.useState();
   const [teamMembers, setTeamMembers] = React.useState([]);
-  const [goodHeroes, setGoodHeroes] = React.useState([]);
-  const [badHeroes, setBadHeroes] = React.useState([]);
+  // const [goodHeroes, setGoodHeroes] = React.useState([]);
+  // const [badHeroes, setBadHeroes] = React.useState([]);
   const [teamStats, setTeamStats] = React.useState({});
+  const history = useHistory();
 
-  console.log(teamMembers);
+  // try out context
+  const isLog = React.useContext(AuthContext);
+
   function removeHeroHandler(heroId) {
     let newTeamMembers;
     return setTeamMembers();
@@ -51,13 +55,12 @@ function App() {
       strength: getStats("strength"),
     });
   }, [teamMembers]);
-  console.log("teamStats", teamStats);
   // Managing heroes
   function addHeroesHandler(hero) {
     // function addGoodHeroes() {}
-    console.log(hero);
+
     if (teamMembers.length === 6) {
-      console.log("No es posible agregar mas heroes");
+      alert("Maximo 6 heroes");
       return;
     }
     // Test if the hero already exist
@@ -94,7 +97,7 @@ function App() {
         }
         let all = res.data.results;
         let filtered = res.data.results.filter((he) => he.name.match(regEx));
-        console.log(filtered);
+
         setHeroes(filtered);
       })
 
@@ -117,38 +120,49 @@ function App() {
 
   const userTokenHandler = (token) => {
     setUserToken(token);
-    console.log("Token", token);
   };
 
   return (
-    <React.Fragment>
-      <Navbar onLogOut={logOutHandler} />
+    <AuthContext.Provider
+      value={{
+        isLogIn: userToken,
+      }}
+    >
       <div className="container">
+        <Navbar onLogOut={logOutHandler} />
         <Switch>
-          {/* <div className="d-flex justify-content-center align-items-center form-box">
-          {!userToken && <LogIn onUserToken={userTokenHandler} />}
-        </div> */}
+          {!userToken && history.replace("/logIn")}
           <Route path="/" exact>
             {" "}
             <SearchHeroes onChangeHandler={changeHandler} />
-            {heroeSearchTxt && (
+            {userToken && (
               <Home heroes={heroes} onAddHeroToTeam={addHeroesHandler} />
             )}
           </Route>
+
+          <Route path="/logIn" exact>
+            <div className="d-flex justify-content-center align-items-center form-box">
+              <LogIn onUserToken={userTokenHandler} />
+            </div>
+          </Route>
+
           <Route path="/heroes">
-            <Heroes
-              teamStats={teamStats}
-              teamMembers={teamMembers}
-              onRemoveHeroTeam={removeHeroTeamHandler}
-              onDetailsHeroTeam={detailsHeroTeamHenadler}
-            />
+            {/* {!userToken && history.replace("/logIn")} */}
+            {userToken && (
+              <Heroes
+                teamStats={teamStats}
+                teamMembers={teamMembers}
+                onRemoveHeroTeam={removeHeroTeamHandler}
+                onDetailsHeroTeam={detailsHeroTeamHenadler}
+              />
+            )}
           </Route>
           <Route path="/hero-details/:heroId">
-            <HeroDetails />
+            {userToken && <HeroDetails />}
           </Route>
         </Switch>
       </div>
-    </React.Fragment>
+    </AuthContext.Provider>
   );
 }
 

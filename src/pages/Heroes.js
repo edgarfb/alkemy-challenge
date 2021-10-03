@@ -5,18 +5,11 @@ import StatsBar from "../components/UI/StatsBar";
 import { Link } from "react-router-dom";
 
 function Heroes(props) {
-  // const v = props.teamMembers.map((hero) => {
-  //   return hero.powerstats.speed;
-  // });
-  console.log("teamStats", props.teamStats);
   let teamsKeys =
     props.teamMembers.length > 0
       ? Object.keys(props.teamMembers[0].powerstats)
       : [];
-  console.log(teamsKeys);
-  React.useEffect(() => {}, []);
 
-  // console.log("mapeo", v);
   return (
     <div className="row g-4">
       <div className="col-md-8">
@@ -49,11 +42,11 @@ function Heroes(props) {
         </div>
       </div>
       <div className="col-md-4">
-        <h2>Team Stats</h2>
+        <h2 className="text-center">Team Stats</h2>
         {teamsKeys.map((k) => {
           return (
             <React.Fragment>
-              <h5>{k}</h5>
+              <h5>{k.toUpperCase()}</h5>
               <StatsBar
                 width={props.teamStats[k] / props.teamMembers.length}
                 value={Math.floor(
@@ -63,10 +56,6 @@ function Heroes(props) {
             </React.Fragment>
           );
         })}
-        {/* {props.teamMembers &&
-          props.teamMembers.map((hero, index) => {
-            
-          })} */}
       </div>
     </div>
   );
