@@ -2,15 +2,14 @@ import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-import AuthContext from "../../context/auth-context";
 import "./LogIn.css";
+import AuthContext from "../../context/auth-context";
 
 // MAIN
 function LogIn(props) {
-  // const [isAuthorized, setIsAuthorized] = React.useState(true);
   const [isSubmited, setIsSubmited] = React.useState(false);
-  const isLogIn = React.useContext(AuthContext);
   const history = useHistory();
+  const authCtx = React.useContext(AuthContext);
   return (
     <Formik
       initialValues={{ email: "", password: "" }}
@@ -32,26 +31,21 @@ function LogIn(props) {
       }}
       onSubmit={(values, { setSubmitting, resetForm }) => {
         resetForm();
-        let baseURL = `https://cors.bridged.cc/http://challenge-react.alkemy.org/`;
+        let baseURL = `https://cors-anywhere.herokuapp.com/http://challenge-react.alkemy.org/`;
         axios
           .post(baseURL, {
             email: values.email,
             password: values.password,
           })
           .then((res) => {
-            let store = localStorage.setItem("userToken", res.data.token);
-            props.onUserToken(localStorage.getItem("userToken"));
+            localStorage.setItem("userToken", res.data.token);
+            authCtx.setInStorageHandler(localStorage.getItem("userToken"));
+            console.log(localStorage.getItem("userToken"));
             setIsSubmited(true);
-            // props.onLogin(true);
             history.replace("/");
           })
           .catch((error) => {
-            if (error.response.status !== 200) {
-              // props.onLogin(false);
-            }
-            setTimeout(() => {
-              // props.onLogin(true);
-            }, 2000);
+            console.log(error);
           });
         setTimeout(() => {
           setSubmitting(false);

@@ -3,13 +3,11 @@ import { Link, useHistory } from "react-router-dom";
 import AuthContext from "../../context/auth-context";
 
 function Navbar(props) {
-  const context = React.useContext(AuthContext);
-  // console.log("Context in Navbar", context);
+  const authCtx = React.useContext(AuthContext);
+  const tokenInLocalStorage = authCtx.tokenInLocalStorage;
 
-  const isLog = React.useContext(AuthContext);
   const history = useHistory();
 
-  console.log("context from navbar", isLog);
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light d-flex flex-nowrap">
       <div className="container-fluid">
@@ -29,12 +27,12 @@ function Navbar(props) {
               </Link>
             </li>
           </ul>
-          {isLog.isLogIn && (
-            <button onClick={props.onLogOut} className="btn btn-success">
+          {tokenInLocalStorage && (
+            <button onClick={authCtx.logOutHandler} className="btn btn-success">
               Log out
             </button>
           )}
-          {!isLog && history.replace("/logIn")}
+
           {/* <button onClick={props.onLogOut} className="btn btn-success">
             Log out
           </button> */}

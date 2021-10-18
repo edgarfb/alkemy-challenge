@@ -7,13 +7,20 @@ function HeroDetails() {
   const { heroId } = useParams();
   const [heroDetails, setHeroDetails] = React.useState(null);
 
-  const TOKEN_API = "1621075358241982";
-  const CORS_ANYWARE = "https://cors.bridged.cc/";
-  const baseUrl = `${CORS_ANYWARE}https://superheroapi.com/api/${TOKEN_API}/`;
+  console.log(heroDetails);
+
+  const TOKEN_API = process.env.REACT_APP_TOKEN_API;
+  const CORS_ANYWARE = "https://cors-anywhere.herokuapp.com/";
+  // const baseUrl = `${CORS_ANYWARE}https://superheroapi.com/api/${TOKEN_API}/`;
+  const baseUrl = `https://superheroapi.com/api/${TOKEN_API}/`;
 
   React.useEffect(() => {
     axios
-      .get(`${baseUrl}${heroId}`)
+      .get(`${baseUrl}${heroId}`, {
+        headers: {
+          "Content-Type": "aplication/json",
+        },
+      })
       .then((res) => {
         let data = res.data;
         return setHeroDetails({

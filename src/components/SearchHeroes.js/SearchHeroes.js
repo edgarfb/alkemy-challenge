@@ -1,20 +1,22 @@
 import React from "react";
-import styles from "./SearchHeroes.module.css";
 
 function SearchHeroes(props) {
+  const inputRef = React.useRef();
   return (
     <div className="input-group mb-3">
       <span className="input-group-text" id="basic-addon1">
         Buscar Heroe
       </span>
-      <input
-        className="form-control"
-        type="text"
-        onChange={(e) => {
+      <form
+        onSubmit={(e) => {
           e.preventDefault();
-          props.onChangeHandler(e.target.value);
+
+          console.log("hi");
+          props.onFindHeroes(inputRef.current.value);
         }}
-      />
+      >
+        <input className="form-control" type="text" ref={inputRef} />
+      </form>
     </div>
   );
 }
