@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch, useHistory } from "react-router-dom";
+import { Route, Switch, useHistory, Redirect } from "react-router-dom";
 import "./App.css";
 import axios from "axios";
 import LogIn from "./components/LogIn/LogIn";
@@ -19,12 +19,9 @@ function App() {
   const authCtx = React.useContext(AuthContext);
   const tokenInLocalStorage = authCtx.tokenInLocalStorage;
 
-  console.log("context", authCtx);
-  const [heroeSearchTxt, setHeroeSearchTxt] = React.useState();
   const [heroes, setHeroes] = React.useState();
   const [teamMembers, setTeamMembers] = React.useState([]);
   const [teamStats, setTeamStats] = React.useState({});
-  const history = useHistory();
 
   function removeHeroHandler(heroId) {
     return setTeamMembers();
@@ -67,6 +64,7 @@ function App() {
       alert("El Hero ya existe");
       return;
     }
+    alert(`${hero.name} se ha agregado al equipo.`);
     return setTeamMembers((prev) => [...prev, hero]);
   }
 
@@ -96,31 +94,40 @@ function App() {
     <div className="container">
       <Navbar />
       <Switch>
-        <Route path="/" exact>
-          {!tokenInLocalStorage && history.replace("/logIn")}
-          <SearchHeroes onFindHeroes={findHeroesHandler} />
+        {tokenInLocalStorage && (
+          <Route path="/" exact>
+            <SearchHeroes onFindHeroes={findHeroesHandler} />
 
-          <Home heroes={heroes} onAddHeroToTeam={addHeroesHandler} />
-        </Route>
+            <Home heroes={heroes} onAddHeroToTeam={addHeroesHandler} />
+          </Route>
+        )}
 
-        <Route path="/logIn">
-          <div className="d-flex justify-content-center align-items-center form-box">
-            <LogIn />
-          </div>
-        </Route>
+        {!tokenInLocalStorage && (
+          <Route path="/logIn">
+            <div className="d-flex justify-content-center align-items-center form-box">
+              <LogIn />
+            </div>
+          </Route>
+        )}
 
-        <Route path="/heroes">
-          {tokenInLocalStorage && (
+        {tokenInLocalStorage && (
+          <Route path="/heroes">
             <Heroes
               teamStats={teamStats}
               teamMembers={teamMembers}
               onRemoveHeroTeam={removeHeroTeamHandler}
               onDetailsHeroTeam={detailsHeroTeamHenadler}
             />
-          )}
-        </Route>
-        <Route path="/hero-details/:heroId">
-          {tokenInLocalStorage && <HeroDetails />}
+          </Route>
+        )}
+        {tokenInLocalStorage && (
+          <Route path="/hero-details/:heroId">
+            <HeroDetails />
+          </Route>
+        )}
+
+        <Route path="*">
+          <Redirect to="/logIn"></Redirect>
         </Route>
       </Switch>
     </div>

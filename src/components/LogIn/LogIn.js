@@ -8,6 +8,7 @@ import AuthContext from "../../context/auth-context";
 // MAIN
 function LogIn(props) {
   const [isSubmited, setIsSubmited] = React.useState(false);
+  const [isSending, setIsSending] = React.useState(false);
   const history = useHistory();
   const authCtx = React.useContext(AuthContext);
   return (
@@ -31,7 +32,8 @@ function LogIn(props) {
       }}
       onSubmit={(values, { setSubmitting, resetForm }) => {
         resetForm();
-        let baseURL = `https://cors-anywhere.herokuapp.com/http://challenge-react.alkemy.org/`;
+        setIsSending(true);
+        let baseURL = process.env.REACT_APP_BASE_URL;
         axios
           .post(baseURL, {
             email: values.email,
@@ -40,8 +42,8 @@ function LogIn(props) {
           .then((res) => {
             localStorage.setItem("userToken", res.data.token);
             authCtx.setInStorageHandler(localStorage.getItem("userToken"));
-            console.log(localStorage.getItem("userToken"));
             setIsSubmited(true);
+            setIsSending(false);
             history.replace("/");
           })
           .catch((error) => {
@@ -89,7 +91,7 @@ function LogIn(props) {
                 Enviar
               </button>
             </div>
-            {!props.onLogin && (
+            {!isSubmited && (
               <div className="alert alert-warning" role="alert">
                 Unauthorized - Please provide valid email and password
               </div>
@@ -97,6 +99,18 @@ function LogIn(props) {
             {isSubmited && (
               <div className="alert alert-success" role="alert">
                 The form have been submitted!
+              </div>
+            )}
+            {isSending && (
+              <div className="d-flex justify-content-center">
+                <button className="btn btn-primary" type="button" disabled>
+                  <span
+                    className="spinner-grow spinner-grow-sm"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  Loading...
+                </button>
               </div>
             )}
           </Form>
