@@ -9,7 +9,10 @@ function Heroes(props) {
     props.teamMembers.length > 0
       ? Object.keys(props.teamMembers[0].powerstats)
       : [];
-
+  let teamOnLocalstorage = JSON.parse(
+    localStorage.getItem("teamOnLocalstorage")
+  );
+  console.log(teamOnLocalstorage);
   return (
     <div className="row g-4">
       <div className="col-md-8">

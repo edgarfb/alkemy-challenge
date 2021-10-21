@@ -9,7 +9,7 @@ function Home(props) {
         props.heroes.map((hero) => (
           <div className="col-md-3">
             <Card
-              onAddHeroToTeam={props.onAddHeroToTeam}
+              // onAddHeroToTeam={props.onAddHeroToTeam}
               hero={hero}
               src={hero.image.url}
               name={hero.name}

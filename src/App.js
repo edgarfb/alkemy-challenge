@@ -9,10 +9,12 @@ import Heroes from "./pages/Heroes";
 import SearchHeroes from "./components/SearchHeroes.js/SearchHeroes";
 import HeroDetails from "./pages/HeroDetails";
 import AuthContext from "./context/auth-context";
+import Modal from "./components/UI/Modal";
 
 const TOKEN_API = process.env.REACT_APP_TOKEN_API;
 const CORS_ANYWARE = process.env.REACT_APP_CORS_ANYWARE;
 // const baseUrl = `${CORS_ANYWARE}https://superheroapi.com/api/${TOKEN_API}/search/`;
+// just for developmen
 const baseUrl = `https://superheroapi.com/api/${TOKEN_API}/search/`;
 
 function App() {
@@ -26,6 +28,8 @@ function App() {
   function removeHeroHandler(heroId) {
     return setTeamMembers();
   }
+
+  console.log("team members", teamMembers);
 
   React.useEffect(() => {
     let stats = teamMembers.map((stat) => {
@@ -64,8 +68,12 @@ function App() {
       alert("El Hero ya existe");
       return;
     }
-    alert(`${hero.name} se ha agregado al equipo.`);
-    return setTeamMembers((prev) => [...prev, hero]);
+
+    // This woks too :)
+    authCtx.showModal();
+    return setTeamMembers((prev) => {
+      return [...prev, hero];
+    });
   }
 
   // Show details of the hero on a especific page
@@ -92,6 +100,9 @@ function App() {
 
   return (
     <div className="container">
+      {authCtx.displayModal && (
+        <Modal success>El hero fue agregado con exito!</Modal>
+      )}
       <Navbar />
       <Switch>
         {tokenInLocalStorage && (

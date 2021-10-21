@@ -17,22 +17,24 @@ function LogIn(props) {
       validate={(values) => {
         const errors = {};
         if (!values.email) {
-          errors.email = "Este campo es necesario.";
+          errors.email = "Debe ingresar un email válido.";
         } else if (
           !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
         ) {
           errors.email = "Formato no válido";
         }
         if (!values.password) {
-          errors.password = "Este campo es necesario.";
+          errors.password = "Debe ingresar su contraseña.";
         } else if (values.password.length < 5) {
-          errors.password = "La contraseña debe de al menos 5 caracteres.";
+          errors.password = <p>La contraseña debe de al menos 5 caracteres.</p>;
         }
         return errors;
       }}
       onSubmit={(values, { setSubmitting, resetForm }) => {
         resetForm();
         setIsSending(true);
+
+        // change the line bellow --- needs cors anywhere
         let baseURL = process.env.REACT_APP_BASE_URL;
         axios
           .post(baseURL, {
@@ -56,7 +58,7 @@ function LogIn(props) {
     >
       {({ values, errors }) => {
         return (
-          <Form className="form-control formBox">
+          <Form className="form-control formBox novalidate">
             <div>
               <h3 className="text-center">Iniciar seción</h3>
             </div>
@@ -71,7 +73,9 @@ function LogIn(props) {
             </div>
             <ErrorMessage
               name="email"
-              component={() => <div className="rojo">{errors.email}</div>}
+              component={() => (
+                <div className="text-danger">{errors.email}</div>
+              )}
             />
             <div className="mb-3">
               <label htmlFor="password">Contraseña</label>
@@ -84,18 +88,16 @@ function LogIn(props) {
             </div>
             <ErrorMessage
               name="password"
-              component={() => <div className="rojo">{errors.password}</div>}
+              component={() => (
+                <div className="text-danger">{errors.password}</div>
+              )}
             />
             <div className="d-flex justify-content-center">
               <button type="submit" className="btn btn-primary">
                 Enviar
               </button>
             </div>
-            {!isSubmited && (
-              <div className="alert alert-warning" role="alert">
-                Unauthorized - Please provide valid email and password
-              </div>
-            )}
+
             {isSubmited && (
               <div className="alert alert-success" role="alert">
                 The form have been submitted!

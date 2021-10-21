@@ -4,14 +4,22 @@ const AuthContext = React.createContext({
   isLogIn: null,
   tokenInLocalStorage: "",
   txt: "",
+  displayModal: null,
   setInStorageHandler: () => {},
   logOutHandler: () => {},
+  showModal: () => {},
+  hideModal: () => {},
 });
 
 export function AuthContextProvider(props) {
   const [tokenInLocalStorage, setTokenInLocalStorage] = React.useState(
     localStorage.getItem("userToken") || ""
   );
+  const [displayModal, setDisplayModal] = React.useState(true);
+  // this is working but need to find if can I put it on a diferent context
+
+  const showModal = () => setDisplayModal(true);
+  const hideModal = () => setDisplayModal(false);
 
   // set the user toker after logIn
   const setInStorageHandler = (token) => setTokenInLocalStorage(token);
@@ -26,10 +34,12 @@ export function AuthContextProvider(props) {
     <AuthContext.Provider
       value={{
         isLogIn: false,
-        txt: "Edgar Text",
+        displayModal: displayModal,
         setInStorageHandler: setInStorageHandler,
         tokenInLocalStorage: tokenInLocalStorage,
         logOutHandler: logOutHandler,
+        showModal,
+        hideModal,
       }}
     >
       {props.children}
