@@ -1,41 +1,16 @@
-import axios from "axios";
 import React from "react";
 import { useParams } from "react-router-dom";
 import Card from "../components/Card/Card";
+import HeroesContext from "../context/heroes-context";
 
 function HeroDetails() {
   const { heroId } = useParams();
   const [heroDetails, setHeroDetails] = React.useState(null);
-
-  console.log(heroDetails);
-
-  const TOKEN_API = process.env.REACT_APP_TOKEN_API;
-  const CORS_ANYWARE = "https://cors-anywhere.herokuapp.com/";
-  // const baseUrl = `${CORS_ANYWARE}https://superheroapi.com/api/${TOKEN_API}/`;
-  const baseUrl = `https://superheroapi.com/api/${TOKEN_API}/`;
+  const heroesCtx = React.useContext(HeroesContext);
 
   React.useEffect(() => {
-    axios
-      .get(`${baseUrl}${heroId}`, {
-        headers: {
-          "Content-Type": "aplication/json",
-        },
-      })
-      .then((res) => {
-        let data = res.data;
-        return setHeroDetails({
-          image: data.image.url,
-          peso: data.appearance.weight[1],
-          altura: data.appearance.height[1],
-          alias: data.name,
-          nombre: data.biography["full-name"],
-          colorOjos: data.appearance["eye-color"],
-          colorDeCabello: data.appearance["hair-color"],
-          lugarDeTrabajo: data.work.base,
-        });
-      })
-      .catch((err) => console.log(err.response));
-  }, [heroId]);
+    heroesCtx.heroDetailsHandler(heroId, setHeroDetails);
+  }, [heroId, heroesCtx]);
 
   return (
     <div className="row">
@@ -44,18 +19,18 @@ function HeroDetails() {
       </div>
       <div className="col-md-8">
         {heroDetails && (
-          <ul class="list-group">
+          <ul className="list-group">
             <h5>{heroDetails.nombre}</h5>
-            <li class="list-group-item">Alias: {heroDetails.alias}</li>
-            <li class="list-group-item">
+            <li className="list-group-item">Alias: {heroDetails.alias}</li>
+            <li className="list-group-item">
               Lugar de trabajo: {heroDetails.lugarDeTrabajo}
             </li>
-            <li class="list-group-item">Altura: {heroDetails.altura}</li>
-            <li class="list-group-item">Peso: {heroDetails.peso}</li>
-            <li class="list-group-item">
+            <li className="list-group-item">Altura: {heroDetails.altura}</li>
+            <li className="list-group-item">Peso: {heroDetails.peso}</li>
+            <li className="list-group-item">
               Color de ojos: {heroDetails.colorOjos}
             </li>
-            <li class="list-group-item">
+            <li className="list-group-item">
               Color de cabello: {heroDetails.colorDeCabello}
             </li>
           </ul>

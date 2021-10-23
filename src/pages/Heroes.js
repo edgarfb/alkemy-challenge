@@ -3,16 +3,16 @@ import Card from "../components/Card/Card";
 import BtnAddHero from "../components/UI/BtnAddHero";
 import StatsBar from "../components/UI/StatsBar";
 import { Link } from "react-router-dom";
+import HeroesContext from "../context/heroes-context";
 
 function Heroes(props) {
+  const heroesCtx = React.useContext(HeroesContext);
   let teamsKeys =
     props.teamMembers.length > 0
       ? Object.keys(props.teamMembers[0].powerstats)
       : [];
-  let teamOnLocalstorage = JSON.parse(
-    localStorage.getItem("teamOnLocalstorage")
-  );
-  console.log(teamOnLocalstorage);
+
+  console.log(props.teamMembers);
   return (
     <div className="row g-4">
       <div className="col-md-8">
@@ -31,7 +31,7 @@ function Heroes(props) {
                   <BtnAddHero
                     className="btn btn-danger"
                     content="Quitar del equipo"
-                    onClick={() => props.onRemoveHeroTeam(hero.id)}
+                    onClick={() => heroesCtx.removeHeroTeamHandler(hero.id)}
                   />
                   <Link
                     className="btn btn-primary"
@@ -45,7 +45,9 @@ function Heroes(props) {
         </div>
       </div>
       <div className="col-md-4">
-        <h2 className="text-center">Team Stats</h2>
+        {props.teamMembers.length > 0 && (
+          <h2 className="text-center">Estadísticas del equipo</h2>
+        )}
         {teamsKeys.map((k) => {
           return (
             <React.Fragment>

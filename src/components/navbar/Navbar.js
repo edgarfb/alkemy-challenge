@@ -1,18 +1,16 @@
 import React from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import AuthContext from "../../context/auth-context";
 
 function Navbar(props) {
   const authCtx = React.useContext(AuthContext);
   const tokenInLocalStorage = authCtx.tokenInLocalStorage;
 
-  const history = useHistory();
-
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light d-flex flex-nowrap">
       <div className="container-fluid">
         <Link to="/" className="navbar-brand">
-          Home
+          Agregar heroes
         </Link>
 
         <div className="d-flex navbar-collapse" id="navbarSupportedContent">
@@ -23,19 +21,15 @@ function Navbar(props) {
                 className="nav-link active"
                 aria-current="page"
               >
-                Heroes
+                Equipo
               </Link>
             </li>
           </ul>
           {tokenInLocalStorage && (
             <button onClick={authCtx.logOutHandler} className="btn btn-success">
-              Log out
+              Cerrar sesion
             </button>
           )}
-
-          {/* <button onClick={props.onLogOut} className="btn btn-success">
-            Log out
-          </button> */}
         </div>
       </div>
     </nav>

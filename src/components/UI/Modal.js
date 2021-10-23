@@ -5,17 +5,7 @@ import times from "../../images/times-solid.svg";
 import AuthContext from "../../context/auth-context";
 
 function Backdrop(props) {
-  const authCtx = React.useContext(AuthContext);
-  return (
-    <div
-      onClick={() => {
-        authCtx.hideModal();
-      }}
-      className={styles.backdrop}
-    >
-      {props.children}
-    </div>
-  );
+  return <div className={styles.backdrop}>{props.children}</div>;
 }
 
 function Modal(props) {

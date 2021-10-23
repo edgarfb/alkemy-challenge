@@ -6,12 +6,15 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { AuthContextProvider } from "./context/auth-context";
+import { HeroesProvider } from "./context/heroes-context";
 
 ReactDOM.render(
   <AuthContextProvider>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <HeroesProvider>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </HeroesProvider>
   </AuthContextProvider>,
   document.getElementById("root")
 );
