@@ -34,7 +34,6 @@ function LogIn(props) {
         resetForm();
         setIsSending(true);
 
-        // change the line bellow --- needs cors anywhere
         let baseURL = process.env.REACT_APP_BASE_URL_FREE_CORS;
         axios
           .post(baseURL, {

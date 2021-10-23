@@ -6,9 +6,6 @@ function SearchHeroes(props) {
   const heroesCtx = React.useContext(HeroesContext);
   return (
     <div className="input-group mb-3">
-      <span className="input-group-text" id="basic-addon1">
-        Buscar Heroe
-      </span>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -16,7 +13,17 @@ function SearchHeroes(props) {
           heroesCtx.findHeroesHandler(inputRef.current.value);
         }}
       >
-        <input className="form-control" type="text" ref={inputRef} autoFocus />
+        <div className="d-flex">
+          <button className="btn btn-default" type="submit">
+            Buscar
+          </button>
+          <input
+            className="form-control"
+            type="text"
+            ref={inputRef}
+            autoFocus
+          />
+        </div>
       </form>
     </div>
   );

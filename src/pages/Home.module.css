@@ -1,0 +1,19 @@
+.welcome {
+  /* background: pink; */
+  min-width: 315px;
+  background-image: url("../images/heroes_bg_mobile.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 100vw;
+  height: 100vh;
+}
+h2 {
+  color: white;
+}
+
+@media (min-width: 768px) {
+  .welcome {
+    /* background: pink; */
+    background-image: url("../images/heroes_bg.jpg");
+  }
+}

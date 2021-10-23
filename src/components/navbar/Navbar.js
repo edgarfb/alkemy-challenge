@@ -10,7 +10,7 @@ function Navbar(props) {
     <nav className="navbar navbar-expand-lg navbar-light bg-light d-flex flex-nowrap">
       <div className="container-fluid">
         <Link to="/" className="navbar-brand">
-          Agregar heroes
+          Inicio
         </Link>
 
         <div className="d-flex navbar-collapse" id="navbarSupportedContent">
@@ -21,13 +21,13 @@ function Navbar(props) {
                 className="nav-link active"
                 aria-current="page"
               >
-                Equipo
+                Mi equipo
               </Link>
             </li>
           </ul>
           {tokenInLocalStorage && (
             <button onClick={authCtx.logOutHandler} className="btn btn-success">
-              Cerrar sesion
+              Salir
             </button>
           )}
         </div>

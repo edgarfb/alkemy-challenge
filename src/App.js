@@ -3,10 +3,10 @@ import { Route, Switch, Redirect } from "react-router-dom";
 import "./App.css";
 
 import LogIn from "./components/LogIn/LogIn";
-import Navbar from "./components/navbar/Navbar";
+import Navbar from "./components/Navbar/Navbar";
 import Home from "./pages/Home";
 import Heroes from "./pages/Heroes";
-import SearchHeroes from "./components/SearchHeroes.js/SearchHeroes";
+import SearchHeroes from "./components/SearchHeroes/SearchHeroes";
 import HeroDetails from "./pages/HeroDetails";
 import AuthContext from "./context/auth-context";
 import Modal from "./components/UI/Modal";
