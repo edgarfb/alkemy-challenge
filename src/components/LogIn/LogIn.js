@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import axios from "axios";
 import "./LogIn.css";
 import AuthContext from "../../context/auth-context";
+import HeroesContext from "../../context/heroes-context";
 
 // MAIN
 function LogIn(props) {
@@ -11,6 +12,7 @@ function LogIn(props) {
   const [isSending, setIsSending] = React.useState(false);
   const history = useHistory();
   const authCtx = React.useContext(AuthContext);
+  const heroesCtx = React.useContext(HeroesContext);
   return (
     <Formik
       initialValues={{ email: "", password: "" }}
@@ -48,7 +50,9 @@ function LogIn(props) {
             history.replace("/");
           })
           .catch((error) => {
-            console.log(error);
+            heroesCtx.showModal("loginError");
+            history.replace("/logIn");
+            setIsSending(false);
           });
         setTimeout(() => {
           setSubmitting(false);

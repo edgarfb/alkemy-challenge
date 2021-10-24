@@ -40,6 +40,9 @@ function Modal(props) {
     case "noMore":
       message = "El equipo sólo puede tener 6 personajes.";
       break;
+    case "loginError":
+      message = "Usuario y/o contraseña incorrectos.";
+      break;
 
     default:
       break;

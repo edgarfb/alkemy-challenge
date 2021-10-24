@@ -15,6 +15,7 @@ export function HeroesProvider(props) {
   const [displayModal, setDisplayModal] = React.useState(null);
   const [typeModal, setTypeModal] = React.useState(null);
   const [saveHeroId, setSaveHeroId] = React.useState(null);
+
   const showModal = (type) => {
     setTypeModal(type);
     setDisplayModal(true);
@@ -23,6 +24,7 @@ export function HeroesProvider(props) {
   const hideModal = () => setDisplayModal(false);
 
   const saveHeroIdHandler = (id) => setSaveHeroId(id);
+
   function heroDetailsHandler(heroId, handler) {
     axios
       .get(`${heroUrl}${heroId}`, {
@@ -30,19 +32,8 @@ export function HeroesProvider(props) {
           "Content-Type": "aplication/json",
         },
       })
-      .then((res) => {
-        let data = res.data;
-        return handler({
-          image: data.image.url,
-          peso: data.appearance.weight[1],
-          altura: data.appearance.height[1],
-          alias: data.name,
-          nombre: data.biography["full-name"],
-          colorOjos: data.appearance["eye-color"],
-          colorDeCabello: data.appearance["hair-color"],
-          lugarDeTrabajo: data.work.base,
-        });
-      })
+      // The handler will be the setState from HeroDetails page
+      .then((res) => handler(res.data))
       .catch((err) => console.log(err.response));
   }
 

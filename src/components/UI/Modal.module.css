@@ -19,6 +19,7 @@
   width: 100%;
   border-radius: 6px;
   opacity: 1;
+  border: 1px solid #e9ecef;
 }
 
 .header,

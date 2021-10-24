@@ -6,6 +6,7 @@ import HeroesContext from "../context/heroes-context";
 function HeroDetails() {
   const { heroId } = useParams();
   const [heroDetails, setHeroDetails] = React.useState(null);
+  // let heroDetails = null;
   const heroesCtx = React.useContext(HeroesContext);
 
   React.useEffect(() => {
@@ -15,23 +16,32 @@ function HeroDetails() {
   return (
     <div className="row">
       <div className="col-md-4">
-        {heroDetails && <Card src={heroDetails.image} />}
+        {heroDetails && <Card src={heroDetails.image.url} />}
       </div>
       <div className="col-md-8">
         {heroDetails && (
           <ul className="list-group">
-            <h5>{heroDetails.nombre}</h5>
-            <li className="list-group-item">Alias: {heroDetails.alias}</li>
+            <h5 className="text-center h3">
+              {heroDetails.biography["full-name"]}
+            </h5>
             <li className="list-group-item">
-              Lugar de trabajo: {heroDetails.lugarDeTrabajo}
-            </li>
-            <li className="list-group-item">Altura: {heroDetails.altura}</li>
-            <li className="list-group-item">Peso: {heroDetails.peso}</li>
-            <li className="list-group-item">
-              Color de ojos: {heroDetails.colorOjos}
+              Alias: {heroDetails.biography["alter-egos"]}
             </li>
             <li className="list-group-item">
-              Color de cabello: {heroDetails.colorDeCabello}
+              Lugar de trabajo: {heroDetails.work.base}
+            </li>
+            <li className="list-group-item">
+              Altura: {heroDetails.appearance.height[1]}
+              {/* continue here */}
+            </li>
+            <li className="list-group-item">
+              Peso: {heroDetails.appearance.weight[1]}
+            </li>
+            <li className="list-group-item">
+              Color de ojos: {heroDetails.appearance["eye-color"]}
+            </li>
+            <li className="list-group-item">
+              Color de cabello: {heroDetails.appearance["hair-color"]}
             </li>
           </ul>
         )}
