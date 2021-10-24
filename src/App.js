@@ -19,9 +19,7 @@ function App() {
 
   return (
     <div className="container">
-      {authCtx.displayModal && (
-        <Modal success>El hero fue agregado con exito!</Modal>
-      )}
+      {heroesCtx.displayModal && <Modal type="success" />}
       <Navbar />
       <Switch>
         {tokenInLocalStorage && (

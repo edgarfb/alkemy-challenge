@@ -15,8 +15,11 @@ function Card(props) {
         {props.removeBtn && (
           <BtnAddHero
             className="btn btn-danger"
-            content="Quitar del equipo"
-            onClick={() => heroesCtx.removeHeroTeamHandler(props.id)}
+            content="Eliminar"
+            onClick={() => {
+              heroesCtx.saveHeroIdHandler(props.id);
+              heroesCtx.showModal("remove");
+            }}
           />
         )}
         {props.addBtn && (

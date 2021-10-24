@@ -5,15 +5,12 @@ import styles from "./Home.module.css";
 function Welcome() {
   return (
     <div className={styles.welcome}>
-      <h2 className="display-2 text-center mt-5">
-        Forma tu equipo de heros y villanos
-      </h2>
+      <h2 className="display-2 text-center mt-5">Crea tu super equipo</h2>
     </div>
   );
 }
 
 function Home(props) {
-  console.log(props.heroes);
   return (
     <div className="row g-4">
       {props.heroes === undefined && <Welcome />}

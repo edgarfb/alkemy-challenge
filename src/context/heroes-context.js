@@ -1,5 +1,4 @@
 import React from "react";
-import AuthContext from "./auth-context";
 import axios from "axios";
 
 const TOKEN_API = process.env.REACT_APP_TOKEN_API;
@@ -13,8 +12,17 @@ export function HeroesProvider(props) {
   const [heroes, setHeroes] = React.useState();
   const [teamMembers, setTeamMembers] = React.useState([]);
   const [teamStats, setTeamStats] = React.useState({});
-  const authCtx = React.useContext(AuthContext);
+  const [displayModal, setDisplayModal] = React.useState(null);
+  const [typeModal, setTypeModal] = React.useState(null);
+  const [saveHeroId, setSaveHeroId] = React.useState(null);
+  const showModal = (type) => {
+    setTypeModal(type);
+    setDisplayModal(true);
+  };
 
+  const hideModal = () => setDisplayModal(false);
+
+  const saveHeroIdHandler = (id) => setSaveHeroId(id);
   function heroDetailsHandler(heroId, handler) {
     axios
       .get(`${heroUrl}${heroId}`, {
@@ -53,17 +61,17 @@ export function HeroesProvider(props) {
   // Add heroe
   function addHeroesHandler(hero) {
     if (teamMembers.length === 6) {
-      alert("Maximo 6 heroes");
+      showModal("noMore");
       return;
     }
     // Test if the hero already exist
     else if (teamMembers.some((h) => h.id === hero.id)) {
-      alert("El Hero ya existe");
+      showModal("exist");
       return;
     }
 
     // fires the modal to user feedback
-    authCtx.showModal();
+    showModal("success");
     return setTeamMembers((prev) => {
       return [...prev, hero];
     });
@@ -106,6 +114,12 @@ export function HeroesProvider(props) {
         heroes,
         teamMembers,
         teamStats,
+        displayModal,
+        typeModal,
+        saveHeroId,
+        showModal,
+        hideModal,
+        saveHeroIdHandler,
         findHeroesHandler,
         addHeroesHandler,
         removeHeroTeamHandler,

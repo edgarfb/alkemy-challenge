@@ -8,9 +8,11 @@ function Heroes(props) {
     props.teamMembers.length > 0
       ? Object.keys(props.teamMembers[0].powerstats)
       : [];
-
   return (
     <div className="row g-4">
+      {props.teamMembers.length === 0 && (
+        <h2 className="text-center h3">No hay miembros en el equipo</h2>
+      )}
       <div className="col-md-8">
         <div className="row">
           {props.teamMembers &&
@@ -33,18 +35,18 @@ function Heroes(props) {
         {props.teamMembers.length > 0 && (
           <h2 className="text-center">Estadísticas del equipo</h2>
         )}
+
         {teamsKeys.map((k) => {
           return (
-            <React.Fragment>
+            <div key={k}>
               <h5>{k.toUpperCase()}</h5>
               <StatsBar
-                key={k}
                 width={props.teamStats[k] / props.teamMembers.length}
                 value={Math.floor(
                   props.teamStats[k] / props.teamMembers.length
                 )}
               />
-            </React.Fragment>
+            </div>
           );
         })}
       </div>

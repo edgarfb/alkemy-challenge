@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Card from "../components/Card/Card";
 import HeroesContext from "../context/heroes-context";
 
@@ -36,6 +36,13 @@ function HeroDetails() {
           </ul>
         )}
       </div>
+      {heroDetails && (
+        <div className="d-flex justify-content-center">
+          <Link to="/heroes" className="btn btn-secondary">
+            Volver
+          </Link>
+        </div>
+      )}
     </div>
   );
 }
