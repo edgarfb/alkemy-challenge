@@ -3,8 +3,10 @@ import axios from "axios";
 
 const TOKEN_API = process.env.REACT_APP_TOKEN_API;
 const CORS_ANYWARE = process.env.REACT_APP_CORS_ANYWARE;
-const searchUrl = `${CORS_ANYWARE}https://superheroapi.com/api/${TOKEN_API}/search/`;
-const heroUrl = `${CORS_ANYWARE}https://superheroapi.com/api/${TOKEN_API}/`;
+const searchUrl = `https://superheroapi.com/api/${TOKEN_API}/search/`;
+const heroUrl = `https://superheroapi.com/api/${TOKEN_API}/`;
+// const searchUrl = `${CORS_ANYWARE}https://superheroapi.com/api/${TOKEN_API}/search/`;
+// const heroUrl = `${CORS_ANYWARE}https://superheroapi.com/api/${TOKEN_API}/`;
 
 const HeroesContext = React.createContext(null);
 
@@ -15,6 +17,19 @@ export function HeroesProvider(props) {
   const [displayModal, setDisplayModal] = React.useState(null);
   const [typeModal, setTypeModal] = React.useState(null);
   const [saveHeroId, setSaveHeroId] = React.useState(null);
+
+  const [goodOnes, setGoodOnes] = React.useState([]);
+  console.log("team", teamMembers);
+  console.log("good ones", goodOnes);
+  React.useEffect(() => {
+    if (goodOnes.length > 3) {
+      return;
+    }
+    let good = teamMembers.filter(
+      (hero) => hero.biography.alignment === "good"
+    );
+    return setGoodOnes((prev) => [...good]);
+  }, [teamMembers]);
 
   const showModal = (type) => {
     setTypeModal(type);
@@ -55,6 +70,7 @@ export function HeroesProvider(props) {
       showModal("noMore");
       return;
     }
+
     // Test if the hero already exist
     else if (teamMembers.some((h) => h.id === hero.id)) {
       showModal("exist");
@@ -63,6 +79,7 @@ export function HeroesProvider(props) {
 
     // fires the modal to user feedback
     showModal("success");
+
     return setTeamMembers((prev) => {
       return [...prev, hero];
     });
