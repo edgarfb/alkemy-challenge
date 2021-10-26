@@ -5,7 +5,7 @@ import styles from "./Home.module.css";
 function Welcome() {
   return (
     <div className={styles.welcome}>
-      <h2 className="display-2 text-center">Crea tu super equipo</h2>
+      <h2>Crea tu super equipo</h2>
     </div>
   );
 }

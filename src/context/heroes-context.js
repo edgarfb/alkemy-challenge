@@ -3,10 +3,11 @@ import axios from "axios";
 
 const TOKEN_API = process.env.REACT_APP_TOKEN_API;
 const CORS_ANYWARE = process.env.REACT_APP_CORS_ANYWARE;
-const searchUrl = `https://superheroapi.com/api/${TOKEN_API}/search/`;
-const heroUrl = `https://superheroapi.com/api/${TOKEN_API}/`;
-// const searchUrl = `${CORS_ANYWARE}https://superheroapi.com/api/${TOKEN_API}/search/`;
-// const heroUrl = `${CORS_ANYWARE}https://superheroapi.com/api/${TOKEN_API}/`;
+// For development
+// const searchUrl = `https://superheroapi.com/api/${TOKEN_API}/search/`;
+// const heroUrl = `https://superheroapi.com/api/${TOKEN_API}/`;
+const searchUrl = `${CORS_ANYWARE}https://superheroapi.com/api/${TOKEN_API}/search/`;
+const heroUrl = `${CORS_ANYWARE}https://superheroapi.com/api/${TOKEN_API}/`;
 
 const HeroesContext = React.createContext(null);
 
@@ -19,17 +20,11 @@ export function HeroesProvider(props) {
   const [saveHeroId, setSaveHeroId] = React.useState(null);
 
   const [goodOnes, setGoodOnes] = React.useState([]);
-  console.log("team", teamMembers);
-  console.log("good ones", goodOnes);
+  const [badOnes, setBadOnes] = React.useState([]);
+
   React.useEffect(() => {
-    if (goodOnes.length > 3) {
-      return;
-    }
-    let good = teamMembers.filter(
-      (hero) => hero.biography.alignment === "good"
-    );
-    return setGoodOnes((prev) => [...good]);
-  }, [teamMembers]);
+    setTeamMembers([...goodOnes, ...badOnes]);
+  }, [goodOnes, badOnes]);
 
   const showModal = (type) => {
     setTypeModal(type);
@@ -70,24 +65,42 @@ export function HeroesProvider(props) {
       showModal("noMore");
       return;
     }
-
     // Test if the hero already exist
-    else if (teamMembers.some((h) => h.id === hero.id)) {
+    if (teamMembers.some((h) => h.id === hero.id)) {
       showModal("exist");
       return;
     }
-
-    // fires the modal to user feedback
-    showModal("success");
-
-    return setTeamMembers((prev) => {
-      return [...prev, hero];
-    });
+    addGoodOnesHandler(hero);
+    addBadOnesHandler(hero);
   }
 
+  const addGoodOnesHandler = (hero) => {
+    if (hero.biography.alignment === "good") {
+      if (goodOnes.length === 3) {
+        showModal("noMoreGoods");
+        return;
+      }
+      // fires the modal to user feedback
+      showModal("success");
+      return setGoodOnes((prev) => [...prev, hero]);
+    }
+  };
+
+  const addBadOnesHandler = (hero) => {
+    if (hero.biography.alignment === "bad") {
+      if (badOnes.length === 3) {
+        showModal("noMoreBads");
+        return;
+      }
+      // fires the modal to user feedback
+      showModal("success");
+      return setBadOnes((prev) => [...prev, hero]);
+    }
+  };
   // Remove Hero
   function removeHeroTeamHandler(heroId) {
-    setTeamMembers(teamMembers.filter((hero) => hero.id !== heroId));
+    setGoodOnes(goodOnes.filter((hero) => hero.id !== heroId)) ||
+      setBadOnes(badOnes.filter((hero) => hero.id !== heroId));
   }
 
   // Manages the stats

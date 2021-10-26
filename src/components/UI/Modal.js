@@ -38,7 +38,13 @@ function Modal(props) {
       message = "El personaje ya esta en el equipo";
       break;
     case "noMore":
-      message = "El equipo sólo puede tener 6 personajes.";
+      message = "Máximo 6 personajes en el equipo.";
+      break;
+    case "noMoreGoods":
+      message = "Máximo 3 personajes del  bien.";
+      break;
+    case "noMoreBads":
+      message = "Máximo 3 personajes del  mal.";
       break;
     case "loginError":
       message = "Usuario y/o contraseña incorrectos.";
